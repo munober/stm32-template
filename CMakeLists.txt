@@ -1,3 +1,8 @@
+# Fix For MACOS compability
+if (APPLE)
+    SET(HAVE_FLAG_SEARCH_PATHS_FIRST 0)
+endif()
+
 PROJECT(STM32F40G_EVAL LANGUAGES C CXX)
 
 set(CMAKE_BUILD_TYPE Debug)
@@ -7,6 +12,7 @@ ENABLE_LANGUAGE(ASM)
 
 SET(TARGET stm32f4HAL)
 ADD_DEFINITIONS(-DDEBUG_UART_HANDLE=UartHandle)
+SET(TOOLCHAIN_PREFIX "/usr/local") # Set depending on System (f.e. Homebrew)
 
 # Remove -rdynamic option from linking that is not supported by arm-none-eabi
 # Also remove "undefined reference to `_sbrk'" error
@@ -47,6 +53,11 @@ FIND_PACKAGE(CMSIS REQUIRED)
 FIND_PACKAGE(STM32HAL COMPONENTS sram gpio uart REQUIRED)
 FIND_PACKAGE(STM32LL COMPONENTS fsmc sdmmc REQUIRED)
 FIND_PACKAGE(STM32BSP COMPONENTS sd sram ts io lcd ili9325 stmpe811 REQUIRED)
+
+# FIND_PACKAGE(STM32HAL)
+# FIND_PACKAGE(STM32LL)
+# FIND_PACKAGE(STM32BSP)
+
 
 INCLUDE_DIRECTORIES(
     ${CMAKE_CURRENT_SOURCE_DIR}
